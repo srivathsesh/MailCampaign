@@ -1,0 +1,61 @@
+M_HH_Level,Description,Location
+A01,Americas Wealthiest,Suburb
+A02, Dream Weavers,Suburb
+A03, White-collar Suburbia,Suburb
+A04, Upscale Suburbanites,Suburb
+A05, Enterprising Couples,Suburb
+A06, Small-town Success,Suburb
+A07, New Suburbia Families,Suburb
+B01, Status-conscious Consumers ,Unknown
+B02, Affluent Urban Professionals,Urban
+B03, Urban Commuter Families,Urban
+B04, Solid Suburban Life,Suburb
+B05, Second-generation Success,Unknown
+B06, Successful Suburbian,Suburb
+C01, Second City Homebodies,Urban
+C02, Prime Middle America,Unknown
+C03, Suburban Optimists,Suburb
+C04, Family Convenience,Unknown
+C05, Mid-market Enterprise,Unknown
+D01, Nuevo Hispanic Families,Unknown
+D02, Working Rural Communities,Rural
+D03, Lower-income Essentials,Unknown
+D04, Small-city Endeavors,Urban
+E01, Ethnic Urban Mix,Urban
+E02, Urban Blues,Urban
+E03, Professional Urbanites,Urban
+E04, Suburban Advantage,Suburb
+E05, American Great Outdoors,Unknown
+E06, Mature America,Unknown
+F01, Steadfast Conservative,Unknown
+F02, Moderate Conventionalists,Unknown
+F03, Southern Blues,Unknown
+F04, Urban Grit,Urban
+F05, Grass-roots Living,Unknown
+G01, Hardy Rural Families,Rural
+G02, Rural Southern Living,Rural
+G03, Coal and Crops,Rural
+G04, Native Americana,Rural
+H01, Young Cosmopolitans,Urban
+H02, Minority Metro Communities,Urban
+H03, Stable Careers,Unknown
+H04, Aspiring Hispania,Unknown
+I01, Industrious Country Living,Rural
+I02, Americas Farmlands,Rural
+I03,Comfy Country Living,Rural
+I04, Small-town Connections,Rural
+I05, Hinterland Families,Unknown
+J01, Rugged Rural Style,Rural
+J02, Latino Nuevo,Urban
+J03, Struggling City Centers,Urban
+J04, College Town Communities,unknown
+J05, Metro Beginnings,Urban
+K01, Unattached Multi-cultures,Unknown
+K02, Academic Influences,Unknown
+K03, African-American Neighborhoods,Unknown
+K04, Urban Diversity,Urban
+K05, New Generation Activists,Unknown
+K06, Getting By,Unknown
+L01, Military Family Life,Unknown
+L02, Major University Towns,Unknown
+L03, Gray Perspectives,Unknown

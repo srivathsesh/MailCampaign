@@ -1,5 +1,7 @@
 # Subject matter expert variable identification
-FeaturesofInterest <- c('ZIP',
+FeaturesofInterest <- c(
+                          'ACCTNO',
+                          'ZIP',
                         'BUYER_STATUS', # Shouldn't be included in the analysis
   #-------------------------- ----------------------------------
   #                 BUYING POWER
@@ -60,7 +62,7 @@ FeaturesofInterest <- c('ZIP',
                         'DOITSELF',
                         'ZHITECH',
                         'ZONLINE',
-                        
+                        'GO_WITH_FLOW',
                         'ZTRAVANY',
 
                         #'ZAUTOOWN',
@@ -69,6 +71,10 @@ FeaturesofInterest <- c('ZIP',
                           'ZRELIGON',
                         colnames(complete.customer.data.frame)[451:554]
                         )
+
+Locations <- read.csv('M_HH_Level_Location.csv',as.is = T) [,c(1,3)]%>% 
+  mutate(Location = as.factor(ifelse(Location == "unknown","Unknown",Location)),
+         M_HH_Level = as.factor(M_HH_Level))
 
 # Get reduced data
 reducedData <- complete.customer.data.frame %>% 
@@ -101,7 +107,14 @@ reducedData %<>%
   select(-PHOMOWNR) %>% 
   mutate(EXAGE = as.numeric(ifelse(EXAGE == "U",ESTAGE,EXAGE))) %>% 
   select(-ESTAGE) %>% 
-  mutate(FEMALEHEAD = as.factor(ifelse(ADULT1_G == "F" | ADULT2_G == "F",1,0)))
+  mutate(FEMALEHEAD = as.factor(ifelse(ADULT1_G == "F" | ADULT2_G == "F",1,0))) %>% 
+  left_join(.,Locations, by = c("M_HH_LEVEL" = "M_HH_Level")) %>% 
+  select(-BUYER_STATUS,
+         -M_HH_LEVEL,
+         -ADULT1_G,
+         -ADULT2_G
+         )
+
   
 
 # Feature selection 
@@ -131,10 +144,7 @@ chisq.test(reducedData$INC_WIOUTSCS_V4,reducedData$OCCUPATION_GROUP)
 
 
 ### We will use INC_WIOUTSCS_V4
-# 
-# ggplot(data = fly) +
-#   geom_mosaic(aes(x = product(DoYouRecline, RudeToRecline), fill=DoYouRecline, conds=product(Gender)), na.rm=TRUE, divider=mosaic("v")) +  labs(x = "Is it rude recline? ", title='f(DoYouRecline, RudeToRecline| Gender)')
-# Select features
+
 
 # Model
 # interpret
