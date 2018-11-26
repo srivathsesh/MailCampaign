@@ -109,6 +109,12 @@ reducedData %<>%
   select(-ESTAGE) %>% 
   mutate(FEMALEHEAD = as.factor(ifelse(ADULT1_G == "F" | ADULT2_G == "F",1,0))) %>% 
   left_join(.,Locations, by = c("M_HH_LEVEL" = "M_HH_Level")) %>% 
+  mutate(Contacted = select(.,starts_with("ANY_")) %>% rowSums(.) > 0,
+         Responded = select(.,starts_with("RESPONSE")) %>% 
+           select(-RESPONSE0) %>% 
+           mutate_if(is.factor,as.character) %>%
+           mutate_if(is.character, as.numeric) %>% 
+           rowSums(.) > 0) %>% 
   select(-BUYER_STATUS,
          -M_HH_LEVEL,
          -ADULT1_G,
@@ -139,7 +145,16 @@ ggplot(reducedData) + geom_mosaic(aes(x= product(OCCUPATION_GROUP,INC_WIOUTSCS_V
 chisq.test(reducedData$INC_WIOUTSCS_V4,reducedData$OCCUPATION_GROUP)
 
 
+reducedData %>% select(starts_with('ANY'),starts_with('RESPONSE')) -> testing
+testing %>% mutate_if(is.factor,as.character) %>% mutate_if(is.character, as.numeric) %>%  colSums(.) -> testagg
+integer(16) -> rst
+for(i in 1:16){ rst[i] <- testagg[i+16names(rst) <- as.character(1:16)
+]/testagg[1]}
+rownames(rst) <- 1:16
+names(rst) <- as.character(1:16)
+plot(testagg[1:16], rst)
 
+plot(rst,type= "b")
 # STAGE OF LIFE data manipulation
 
 
