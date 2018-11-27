@@ -159,8 +159,34 @@ reshaped <- reducedData %>%
   groupingCols <- colnames(reshaped)[1:23]
   
   reshapedResp <- reshape2::melt(reshaped,id = groupingCols,value.name = "Response") %>% 
-    mutate(Campaign = as.numeric(substr(as.character(variable),9,nchar(as.character(variable)))))
-  reshapedSumMail <- reshape2::melt(reducedData %>% select(starts_with("SUM_MAIL"),!!groupingCols),id= groupingCols, value.name = "SUM_MAIL")
+    mutate(Campaign = as.numeric(substr(as.character(variable),9,nchar(as.character(variable))))) %>% select(-variable)
+  reshapedSumMail <- reshape2::melt(reducedData %>% select(starts_with("SUM_MAIL"),!!groupingCols),id= groupingCols, value.name = "SUM_MAIL") %>% 
+    mutate(Campaign = as.numeric(substr(as.character(variable),10,nchar(as.character(variable))))) %>% select(-variable)
+  reshapedAmt <- reshape2::melt(reducedData %>% select(starts_with("TOTAMT"),!!groupingCols) %>% select(-TOTAMT),id= groupingCols, value.name = "Amount") %>% 
+    mutate(Campaign = as.numeric(substr(as.character(variable),7,nchar(as.character(variable))))) %>% select(-variable)
+  reshapedQTY <- reshape2::melt(reducedData %>% select(starts_with("QTY"),!!groupingCols) %>% select(-QTY),id= groupingCols, value.name = "QTY") %>% 
+    mutate(Campaign = as.numeric(substr(as.character(variable),4,nchar(as.character(variable))))) %>% select(-variable)
+  reshapedCumMail <- reshape2::melt(reducedData %>% select(starts_with("TOTAL_MAIL_"),!!groupingCols),id= groupingCols, value.name = "CUM_MAIL") %>% 
+    mutate(Campaign = as.numeric(substr(as.character(variable),12,nchar(as.character(variable))))) %>% select(-variable)
+  
+  RedShaped <- merge.data.frame(x = reshapedResp,reshapedSumMail,all.x = T)
+  RedShaped <- merge.data.frame(x = RedShaped,reshapedAmt,all.x = T)
+  RedShaped <- merge.data.frame(x = RedShaped,reshapedQTY,all.x = T)
+  RedShaped <- merge.data.frame(x = RedShaped,reshapedSumMail,all.x = T)
+  
+  ReplaceEmptyLevel <- function(x) {
+    x <- as.character(x)
+    as.factor(ifelse(x=="","N",x))
+  }
+  
+  RedShaped %<>% as_tibble() %>% 
+    mutate_if(is.factor,ReplaceEmptyLevel) %>% 
+    mutate(Contacted = ifelse(SUM_MAIL > 0 , 1, 0),
+           DOITSELF = as.factor(DOITSELF),
+           CREDITCARD = as.factor(CREDITCARD),
+           Response = as.factor(Response),
+           Contacted = as.factor(Contacted)) 
+  
 # Feature selection 
 
 # EDA
