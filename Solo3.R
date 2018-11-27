@@ -85,7 +85,7 @@ reducedData %<>%
          YEAR_BLT = as.numeric(YEAR_BLT),
          NUM_CHILD = as.numeric(NUM_CHILD),
          PENNY_SAVED_EARNED = as.numeric(PENNY_SAVED_EARNED),
-         DOTSELF = as.numeric(DOITSELF),
+         DOITSELF = as.numeric(DOITSELF),
          CREDITCARD = ifelse((AMEX_PREM == "Y"| AMEX_REG == "Y"|
                                DEBIT_CC == "Y"| DISC_PREM == "Y"|
                                DISC_PREM == "Y"|DISC_REG == "Y"|
@@ -121,8 +121,46 @@ reducedData %<>%
          -ADULT2_G
          )
 
-  
+ # Reshape reducedData
+# Objective is to have a data frame that looks something like this 
+#----------------------------------------------------------
+# ACCTNO | Response | Campaign | Contacted | Qty | Amount | Other Attributes
+#----------------------------------------------------------
+#        |          |          |           |    |         
+#________|__________|__________|___________|____|__________
 
+ 
+reshaped <- reducedData %>% 
+  select(ACCTNO
+         ,INC_WIOUTSCS_V4
+         ,ZINVESTR
+         ,PENNY_SAVED_EARNED
+         ,OCCUPATION_GROUP
+         ,FEMALE_LABOR_FOR
+         ,EXAGE
+         ,MARRIED
+         ,NUM_CHILD
+         ,HOMEOWNR
+         ,YEAR_BLT
+         ,AVG_COMMUTETIM
+         ,DOITSELF
+         ,ZHITECH
+         ,ZONLINE
+         ,GO_WITH_FLOW
+         ,ZTRAVANY
+         ,ZDONENVR
+         ,ZVOLUNTR
+         ,ZRELIGON
+         ,CREDITCARD
+         ,FEMALEHEAD
+         ,Location
+         ,starts_with("RESPONSE")
+         ) 
+  groupingCols <- colnames(reshaped)[1:23]
+  
+  reshapedResp <- reshape2::melt(reshaped,id = groupingCols,value.name = "Response") %>% 
+    mutate(Campaign = as.numeric(substr(as.character(variable),9,nchar(as.character(variable)))))
+  reshapedSumMail <- reshape2::melt(reducedData %>% select(starts_with("SUM_MAIL"),!!groupingCols),id= groupingCols, value.name = "SUM_MAIL")
 # Feature selection 
 
 # EDA
@@ -148,9 +186,9 @@ chisq.test(reducedData$INC_WIOUTSCS_V4,reducedData$OCCUPATION_GROUP)
 reducedData %>% select(starts_with('ANY'),starts_with('RESPONSE')) -> testing
 testing %>% mutate_if(is.factor,as.character) %>% mutate_if(is.character, as.numeric) %>%  colSums(.) -> testagg
 integer(16) -> rst
-for(i in 1:16){ rst[i] <- testagg[i+16names(rst) <- as.character(1:16)
-]/testagg[1]}
-rownames(rst) <- 1:16
+for(i in 1:16){ rst[i] <- testagg[i+16]/testagg[1]}
+
+
 names(rst) <- as.character(1:16)
 plot(testagg[1:16], rst)
 
